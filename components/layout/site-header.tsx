@@ -2,20 +2,48 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sparkles, BookOpen, Bookmark, User, Menu, X } from 'lucide-react'
+import { Sparkles, BookOpen, Bookmark, User, Menu, X, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const navigation = [
   { name: 'Home', href: '/', icon: Sparkles },
   { name: 'Articles', href: '/articles', icon: BookOpen },
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
+  { name: 'Upload', href: '/upload', icon: Upload },
 ]
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [user, setUser] = useState<{ name: string | null; email: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/auth/me')
+        const data = await res.json()
+        setUser(data.user)
+      } catch {
+        setUser(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchUser()
+  }, [pathname]) // Refresh on navigation
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      setUser(null)
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Logout failed', error)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -51,14 +79,29 @@ export function SiteHeader() {
           })}
         </div>
 
-        {/* Auth buttons */}
+        {/* Auth buttons / User Menu */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/auth/login">Sign In</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/auth/register">Get Started</Link>
-          </Button>
+          {loading ? (
+            <div className="h-8 w-20 animate-pulse bg-muted rounded" />
+          ) : user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium">
+                Hello, {user.name || user.email.split('@')[0]}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/auth/login">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/auth/register">Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -101,16 +144,36 @@ export function SiteHeader() {
               )
             })}
             <div className="pt-4 border-t space-y-2">
-              <Button variant="outline" className="w-full" asChild>
-                <Link href="/auth/login" onClick={() => setMobileMenuOpen(false)}>
-                  Sign In
-                </Link>
-              </Button>
-              <Button className="w-full" asChild>
-                <Link href="/auth/register" onClick={() => setMobileMenuOpen(false)}>
-                  Get Started
-                </Link>
-              </Button>
+              {user ? (
+                <>
+                  <div className="px-4 py-2 text-sm font-medium border-b mb-2">
+                    {user.name || user.email}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handleLogout()
+                      setMobileMenuOpen(false)
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link href="/auth/login" onClick={() => setMobileMenuOpen(false)}>
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button className="w-full" asChild>
+                    <Link href="/auth/register" onClick={() => setMobileMenuOpen(false)}>
+                      Get Started
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

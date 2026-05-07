@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SiteHeader } from '@/components/layout/site-header'
+import { UserIdentityInitializer } from '@/components/auth/user-identity-initializer'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -50,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background">
       <body className="font-sans antialiased min-h-screen flex flex-col">
+        <UserIdentityInitializer />
         <SiteHeader />
         <main className="flex-1">
           {children}

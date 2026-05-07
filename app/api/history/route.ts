@@ -78,7 +78,7 @@ export async function GET() {
       return NextResponse.json({ history: [] })
     }
 
-    const { userIdCondition, params } = getUserQueryParams(identity)
+    const { userIdCondition, params } = getUserQueryParams(identity, 'rh')
 
     const history = await query(`
       SELECT 
