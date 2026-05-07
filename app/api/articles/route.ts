@@ -1,7 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { searchArticles, getCategories } from '@/lib/recommendation-engine'
+import { vectorizeArticle } from '@/lib/vectorizer'
+import { getCurrentUser } from '@/lib/auth'
 import type { ArticlePreview } from '@/lib/types'
+
+export async function POST(request: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+    if (!user) {
+      return NextResponse.json(
+        { error: 'You must be logged in to upload articles' },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+    const { title, body: content, excerpt, author, category, tags, image_url, reading_time } = body
+
+    if (!title || !content) {
+      return NextResponse.json(
+        { error: 'Title and content are required' },
+        { status: 400 }
+      )
+    }
+
+    const slug = title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      + '-' + Math.random().toString(36).substring(2, 7)
+
+    const result = await query<{ insertId: number }>(`
+      INSERT INTO articles (user_id, title, slug, body, excerpt, author, category, tags, image_url, reading_time, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+    `, [
+      user.id,
+      title,
+      slug,
+      content,
+      excerpt || null,
+      author || user.name || null,
+      category || null,
+      tags ? JSON.stringify(tags) : null,
+      image_url || null,
+      reading_time || Math.ceil(content.split(/\s+/).length / 200)
+    ])
+
+    const insertId = (result as unknown as { insertId: number }).insertId
+
+    // Run vectorizer on the new article
+    await vectorizeArticle(insertId)
+
+    return NextResponse.json({
+      success: true,
+      articleId: insertId,
+      slug
+    })
+  } catch (error) {
+    console.error('Error creating article:', error)
+    return NextResponse.json(
+      { error: 'Failed to create article' },
+      { status: 500 }
+    )
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,16 +86,16 @@ export async function GET(request: NextRequest) {
         FROM articles
         WHERE category = ?
         ORDER BY created_at DESC
-        LIMIT ? OFFSET ?
-      `, [category, limit, offset])
+        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
+      `, [category])
     } else {
       // Get all articles
       articles = await query<ArticlePreview[]>(`
         SELECT id, title, slug, excerpt, author, category, image_url, reading_time, created_at
         FROM articles
         ORDER BY created_at DESC
-        LIMIT ? OFFSET ?
-      `, [limit, offset])
+        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
+      `)
     }
 
     // Get total count for pagination

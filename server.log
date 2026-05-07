@@ -1,0 +1,214 @@
+
+> my-project@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.2:3001
+✓ Ready in 791ms
+
+ GET /api/bookmarks 200 in 2.7s (next.js: 2.5s, application-code: 208ms)
+○ Compiling /articles ...
+ GET /api/articles 200 in 952ms (next.js: 918ms, application-code: 35ms)
+ GET /articles 200 in 8.2s (next.js: 6.3s, application-code: 1825ms)
+ GET /api/auth/me 200 in 620ms (next.js: 567ms, application-code: 53ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778157887697-45ly9 200 in 1556ms (next.js: 1529ms, application-code: 26ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778157887697-45ly9 200 in 1592ms (next.js: 1531ms, application-code: 61ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778157887697-45ly9 200 in 4.4s (next.js: 2.7s, application-code: 1696ms)
+ GET /api/auth/me 200 in 20ms (next.js: 5ms, application-code: 15ms)
+ POST /api/history 200 in 455ms (next.js: 336ms, application-code: 119ms)
+ GET /api/articles/20/related?limit=5 200 in 1831ms (next.js: 1803ms, application-code: 27ms)
+ GET /api/bookmarks/20 200 in 1813ms (next.js: 1796ms, application-code: 17ms)
+ GET /api/bookmarks/20 200 in 35ms (next.js: 27ms, application-code: 8ms)
+ GET / 200 in 865ms (next.js: 709ms, application-code: 156ms)
+ GET /api/auth/me 200 in 18ms (next.js: 7ms, application-code: 11ms)
+ GET /api/recommendations?limit=6 200 in 441ms (next.js: 409ms, application-code: 32ms)
+ GET /auth/register 200 in 767ms (next.js: 629ms, application-code: 138ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 7ms)
+ POST /api/auth/register 200 in 496ms (next.js: 286ms, application-code: 210ms)
+ GET / 200 in 60ms (next.js: 4ms, application-code: 56ms)
+ GET / 200 in 82ms (next.js: 4ms, application-code: 78ms)
+ GET /api/recommendations?limit=6 200 in 37ms (next.js: 3ms, application-code: 33ms)
+ GET /api/auth/me 200 in 18ms (next.js: 6ms, application-code: 12ms)
+ GET /upload 200 in 609ms (next.js: 506ms, application-code: 103ms)
+ GET /api/auth/me 200 in 17ms (next.js: 7ms, application-code: 9ms)
+ GET /api/auth/me 200 in 20ms (next.js: 3ms, application-code: 18ms)
+ POST /api/articles 200 in 57ms (next.js: 3ms, application-code: 54ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 57ms (next.js: 39ms, application-code: 18ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 59ms (next.js: 49ms, application-code: 10ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 214ms (next.js: 38ms, application-code: 176ms)
+ GET /api/articles/21/related?limit=5 200 in 138ms (next.js: 81ms, application-code: 57ms)
+ GET /api/auth/me 200 in 45ms (next.js: 14ms, application-code: 31ms)
+ GET /api/bookmarks/21 200 in 153ms (next.js: 91ms, application-code: 62ms)
+ POST /api/history 200 in 211ms (next.js: 24ms, application-code: 187ms)
+ GET /api/bookmarks/21 200 in 21ms (next.js: 3ms, application-code: 18ms)
+ POST /api/bookmarks 200 in 33ms (next.js: 3ms, application-code: 30ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 16ms (next.js: 7ms, application-code: 8ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 392ms (next.js: 13ms, application-code: 379ms)
+ GET /api/auth/me 200 in 27ms (next.js: 4ms, application-code: 23ms)
+ POST /api/history 200 in 40ms (next.js: 6ms, application-code: 34ms)
+ GET /api/articles/21/related?limit=5 200 in 20ms (next.js: 6ms, application-code: 14ms)
+ GET /api/bookmarks/21 200 in 16ms (next.js: 3ms, application-code: 14ms)
+ GET /bookmarks 200 in 773ms (next.js: 680ms, application-code: 93ms)
+ GET /api/bookmarks 200 in 24ms (next.js: 9ms, application-code: 15ms)
+ GET /api/auth/me 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET /bookmarks 200 in 21ms (next.js: 4ms, application-code: 17ms)
+ GET /bookmarks 200 in 29ms (next.js: 4ms, application-code: 25ms)
+ GET /api/articles 200 in 20ms (next.js: 4ms, application-code: 16ms)
+ GET /articles 200 in 217ms (next.js: 4ms, application-code: 213ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 50ms (next.js: 37ms, application-code: 12ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 30ms (next.js: 5ms, application-code: 25ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177306844-txa17 200 in 239ms (next.js: 64ms, application-code: 175ms)
+ GET /api/articles/21/related?limit=5 200 in 130ms (next.js: 63ms, application-code: 67ms)
+ GET /api/auth/me 200 in 41ms (next.js: 14ms, application-code: 27ms)
+ POST /api/history 200 in 80ms (next.js: 28ms, application-code: 52ms)
+ GET /api/bookmarks/21 200 in 77ms (next.js: 56ms, application-code: 21ms)
+ GET /api/bookmarks/21 200 in 62ms (next.js: 49ms, application-code: 13ms)
+ GET / 200 in 85ms (next.js: 3ms, application-code: 81ms)
+ GET /api/auth/me 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/recommendations?limit=6 200 in 23ms (next.js: 4ms, application-code: 20ms)
+ GET /auth/register 200 in 72ms (next.js: 3ms, application-code: 69ms)
+ GET /api/auth/me 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ POST /api/auth/register 200 in 163ms (next.js: 2ms, application-code: 160ms)
+ GET / 200 in 41ms (next.js: 3ms, application-code: 38ms)
+ GET / 200 in 43ms (next.js: 3ms, application-code: 40ms)
+ GET /api/recommendations?limit=6 200 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /api/auth/me 200 in 15ms (next.js: 7ms, application-code: 8ms)
+ GET /upload 200 in 62ms (next.js: 3ms, application-code: 60ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/auth/me 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ POST /api/articles 200 in 35ms (next.js: 3ms, application-code: 32ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 49ms (next.js: 37ms, application-code: 12ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 51ms (next.js: 41ms, application-code: 10ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 172ms (next.js: 33ms, application-code: 139ms)
+ GET /api/articles/22/related?limit=5 200 in 94ms (next.js: 47ms, application-code: 47ms)
+ GET /api/auth/me 200 in 98ms (next.js: 54ms, application-code: 44ms)
+ POST /api/history 200 in 29ms (next.js: 8ms, application-code: 21ms)
+ GET /api/bookmarks/22 200 in 81ms (next.js: 64ms, application-code: 17ms)
+ GET /api/bookmarks/22 200 in 20ms (next.js: 6ms, application-code: 14ms)
+ POST /api/bookmarks 200 in 47ms (next.js: 24ms, application-code: 23ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 33ms (next.js: 10ms, application-code: 23ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 30ms (next.js: 8ms, application-code: 22ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 280ms (next.js: 14ms, application-code: 267ms)
+ GET /api/auth/me 200 in 54ms (next.js: 18ms, application-code: 35ms)
+ POST /api/history 200 in 56ms (next.js: 5ms, application-code: 51ms)
+ GET /api/articles/22/related?limit=5 200 in 23ms (next.js: 4ms, application-code: 19ms)
+ GET /api/bookmarks/22 200 in 24ms (next.js: 9ms, application-code: 16ms)
+ GET /bookmarks 200 in 77ms (next.js: 3ms, application-code: 74ms)
+ GET /api/bookmarks 200 in 21ms (next.js: 4ms, application-code: 17ms)
+ GET /api/auth/me 200 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /bookmarks 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /bookmarks 200 in 29ms (next.js: 6ms, application-code: 23ms)
+ GET /api/articles 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /articles 200 in 239ms (next.js: 6ms, application-code: 232ms)
+ GET /api/auth/me 200 in 13ms (next.js: 4ms, application-code: 10ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 60ms (next.js: 38ms, application-code: 22ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 61ms (next.js: 47ms, application-code: 14ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177396822-89wed 200 in 226ms (next.js: 44ms, application-code: 183ms)
+ GET /api/auth/me 200 in 50ms (next.js: 19ms, application-code: 31ms)
+ GET /api/articles/22/related?limit=5 200 in 176ms (next.js: 75ms, application-code: 101ms)
+ POST /api/history 200 in 85ms (next.js: 17ms, application-code: 68ms)
+ GET /api/bookmarks/22 200 in 68ms (next.js: 51ms, application-code: 17ms)
+ GET /api/bookmarks/22 200 in 19ms (next.js: 5ms, application-code: 14ms)
+ GET / 200 in 84ms (next.js: 3ms, application-code: 81ms)
+ GET /api/auth/me 200 in 9ms (next.js: 2ms, application-code: 6ms)
+ GET /api/recommendations?limit=6 200 in 39ms (next.js: 12ms, application-code: 28ms)
+ GET /auth/register 200 in 81ms (next.js: 4ms, application-code: 76ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 7ms)
+ POST /api/auth/register 200 in 164ms (next.js: 3ms, application-code: 161ms)
+ GET / 200 in 47ms (next.js: 3ms, application-code: 44ms)
+ GET / 200 in 50ms (next.js: 3ms, application-code: 47ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/recommendations?limit=6 200 in 34ms (next.js: 14ms, application-code: 20ms)
+ GET /upload 200 in 56ms (next.js: 3ms, application-code: 53ms)
+ GET /api/auth/me 200 in 11ms (next.js: 3ms, application-code: 8ms)
+ GET /api/auth/me 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ POST /api/articles 200 in 30ms (next.js: 3ms, application-code: 27ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 46ms (next.js: 33ms, application-code: 13ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 50ms (next.js: 40ms, application-code: 10ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 188ms (next.js: 32ms, application-code: 157ms)
+ GET /api/articles/23/related?limit=5 200 in 117ms (next.js: 53ms, application-code: 64ms)
+ GET /api/auth/me 200 in 53ms (next.js: 13ms, application-code: 41ms)
+ GET /api/bookmarks/23 200 in 108ms (next.js: 91ms, application-code: 17ms)
+ POST /api/history 200 in 175ms (next.js: 26ms, application-code: 150ms)
+ GET /api/bookmarks/23 200 in 29ms (next.js: 6ms, application-code: 24ms)
+ POST /api/bookmarks 200 in 37ms (next.js: 16ms, application-code: 22ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 15ms (next.js: 7ms, application-code: 8ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 174ms (next.js: 8ms, application-code: 165ms)
+ POST /api/history 200 in 41ms (next.js: 7ms, application-code: 34ms)
+ GET /api/auth/me 200 in 62ms (next.js: 29ms, application-code: 33ms)
+ GET /api/bookmarks/23 200 in 24ms (next.js: 8ms, application-code: 16ms)
+ GET /api/articles/23/related?limit=5 200 in 31ms (next.js: 8ms, application-code: 24ms)
+ GET /bookmarks 200 in 56ms (next.js: 3ms, application-code: 53ms)
+ GET /api/bookmarks 200 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /bookmarks 200 in 21ms (next.js: 3ms, application-code: 17ms)
+ GET /bookmarks 200 in 39ms (next.js: 4ms, application-code: 35ms)
+ GET / 200 in 107ms (next.js: 5ms, application-code: 102ms)
+ GET /api/recommendations?limit=6 200 in 38ms (next.js: 5ms, application-code: 33ms)
+ GET /api/auth/me 200 in 15ms (next.js: 6ms, application-code: 9ms)
+ GET /api/articles 200 in 19ms (next.js: 6ms, application-code: 13ms)
+ GET /articles 200 in 248ms (next.js: 5ms, application-code: 244ms)
+ GET /api/auth/me 200 in 13ms (next.js: 5ms, application-code: 8ms)
+[browser] Image with src "https://images.unsplash.com/photo-1529604278261-8bfcdb00a7b9?w=800" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="page" pagePath="articles/p...">
+      <SegmentTrieNode>
+      <ArticlesPage>
+        <div className="container ...">
+          <div className="max-w-6xl ...">
+            <header>
+            <Suspense fallback={<div>}>
+              <ArticlesList>
+                <div className="space-y-8">
+                  <div className="flex flex-...">
+                    <Suspense fallback={<div>}>
+                      <SearchBar>
+                        <form onSubmit={function handleSubmit} className="relative f...">
+                          <div className="relative f...">
+                            <Search>
+                            <Input type="text" placeholder="Search art..." value="" onChange={function onChange} ...>
+                              <input
+                                type="text"
+                                data-slot="input"
+                                className="file:text-foreground placeholder:text-muted-foreground selection:bg-primary..."
+                                placeholder="Search articles..."
+                                value=""
+                                onChange={function onChange}
+-                               style={{caret-color:"transparent"}}
+                              >
+                          ...
+                    ...
+                  ...
+    ...
+
+ GET / 200 in 117ms (next.js: 4ms, application-code: 113ms)
+ GET /api/recommendations?limit=6 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /api/auth/me 200 in 12ms (next.js: 5ms, application-code: 7ms)
+ GET /api/articles 200 in 19ms (next.js: 2ms, application-code: 16ms)
+ GET /articles 200 in 178ms (next.js: 4ms, application-code: 174ms)
+ GET /api/auth/me 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 55ms (next.js: 47ms, application-code: 9ms)
+ GET /api/articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 65ms (next.js: 35ms, application-code: 30ms)
+ GET /articles/the-future-of-ai-in-mindfulness-1778177582028-pyds4 200 in 261ms (next.js: 39ms, application-code: 221ms)
+ GET /api/auth/me 200 in 56ms (next.js: 22ms, application-code: 34ms)
+ GET /api/articles/23/related?limit=5 200 in 148ms (next.js: 50ms, application-code: 98ms)
+ POST /api/history 200 in 178ms (next.js: 28ms, application-code: 150ms)
+ GET /api/bookmarks/23 200 in 111ms (next.js: 85ms, application-code: 26ms)
+ GET /api/bookmarks/23 200 in 22ms (next.js: 6ms, application-code: 16ms)

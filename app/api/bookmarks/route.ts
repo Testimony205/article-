@@ -12,7 +12,7 @@ export async function GET() {
       return NextResponse.json({ bookmarks: [] })
     }
 
-    const { userIdCondition, params } = getUserQueryParams(identity)
+    const { userIdCondition, params } = getUserQueryParams(identity, 'b')
 
     const bookmarks = await query(`
       SELECT 
@@ -28,9 +28,8 @@ export async function GET() {
         a.reading_time
       FROM bookmarks b
       JOIN articles a ON b.article_id = a.id
-      WHERE ${userIdCondition}
-      ORDER BY b.created_at DESC
-    `, params)
+      WHERE b.user_id = ? OR b.anonymous_id = ?
+    `, [identity.userId || null, identity.anonymousId || null])
 
     return NextResponse.json({ bookmarks })
   } catch (error) {
@@ -72,11 +71,10 @@ export async function POST(request: NextRequest) {
     const { userId, anonymousId } = getUserInsertParams(identity)
 
     // Check if bookmark already exists
-    const { userIdCondition, params } = getUserQueryParams(identity)
     const existing = await query<{ id: number }[]>(`
       SELECT id FROM bookmarks 
-      WHERE ${userIdCondition} AND article_id = ?
-    `, [...params, articleId])
+      WHERE (user_id = ? OR anonymous_id = ?) AND article_id = ?
+    `, [userId, anonymousId, articleId])
 
     if (existing.length > 0) {
       return NextResponse.json({ 
@@ -124,12 +122,12 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ success: true, bookmarked: false })
     }
 
-    const { userIdCondition, params } = getUserQueryParams(identity)
+    const { userId, anonymousId } = getUserInsertParams(identity)
 
     await query(`
       DELETE FROM bookmarks 
-      WHERE ${userIdCondition} AND article_id = ?
-    `, [...params, articleId])
+      WHERE (user_id = ? OR anonymous_id = ?) AND article_id = ?
+    `, [userId, anonymousId, articleId])
 
     return NextResponse.json({ 
       success: true, 

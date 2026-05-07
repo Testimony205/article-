@@ -163,8 +163,8 @@ async function getDefaultRecommendations(limit: number): Promise<ArticleWithScor
     SELECT id, title, slug, excerpt, author, category, image_url, reading_time, created_at
     FROM articles
     ORDER BY created_at DESC
-    LIMIT ?
-  `, [limit])
+    LIMIT ${Number(limit)}
+  `)
 
   return articles.map((article, index) => ({
     ...article,
@@ -184,8 +184,8 @@ export async function getArticlesByCategory(
     FROM articles
     WHERE category = ?
     ORDER BY created_at DESC
-    LIMIT ?
-  `, [category, limit])
+    LIMIT ${Number(limit)}
+  `, [category])
 }
 
 /**
@@ -199,8 +199,8 @@ export async function searchArticles(
     SELECT id, title, slug, excerpt, author, category, image_url, reading_time, created_at
     FROM articles
     WHERE MATCH(title, body) AGAINST(? IN NATURAL LANGUAGE MODE)
-    LIMIT ?
-  `, [searchQuery, limit])
+    LIMIT ${Number(limit)}
+  `, [searchQuery])
 }
 
 /**

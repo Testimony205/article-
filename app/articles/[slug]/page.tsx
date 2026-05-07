@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import type { Article } from '@/lib/types'
 
 async function getArticle(slug: string): Promise<Article | null> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'
   
   try {
     const res = await fetch(`${baseUrl}/api/articles/${slug}`, {

@@ -50,18 +50,19 @@ export async function getUserIdentity(): Promise<UserIdentity> {
  * Get query parameters for user-specific database queries
  * Returns the appropriate WHERE clause conditions
  */
-export function getUserQueryParams(identity: UserIdentity): {
+export function getUserQueryParams(identity: UserIdentity, tableAlias?: string): {
   userIdCondition: string
   params: (number | string | null)[]
 } {
+  const prefix = tableAlias ? `${tableAlias}.` : ''
   if (identity.type === 'authenticated' && identity.userId) {
     return {
-      userIdCondition: 'user_id = ?',
+      userIdCondition: `${prefix}user_id = ?`,
       params: [identity.userId],
     }
   } else if (identity.anonymousId) {
     return {
-      userIdCondition: 'anonymous_id = ?',
+      userIdCondition: `${prefix}anonymous_id = ?`,
       params: [identity.anonymousId],
     }
   }
