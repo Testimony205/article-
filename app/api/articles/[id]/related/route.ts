@@ -16,7 +16,7 @@ export async function GET(
     
     if (isNaN(parseInt(id))) {
       // It's a slug, get the numeric ID
-      const articles = await query<[{ id: number }]>(
+      const articles = await query<Array<{ id: number }>>(
         `SELECT id FROM articles WHERE slug = ?`,
         [id]
       )

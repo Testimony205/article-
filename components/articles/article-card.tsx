@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Clock, User } from 'lucide-react'
+import { Clock, Newspaper, User } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import type { ArticlePreview, ArticleWithScore } from '@/lib/types'
@@ -59,7 +59,12 @@ export function ArticleCard({ article, showScore = false }: ArticleCardProps) {
         
         <CardFooter className="pt-2 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
-            {article.author && (
+            {article.source_name ? (
+              <span className="flex items-center gap-1">
+                <Newspaper className="h-3 w-3" />
+                {article.source_name}
+              </span>
+            ) : article.author && (
               <span className="flex items-center gap-1">
                 <User className="h-3 w-3" />
                 {article.author}

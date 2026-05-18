@@ -9,6 +9,10 @@ export interface Article {
   category: string | null
   tags: string[] | null
   image_url: string | null
+  source_url: string | null
+  source_name: string | null
+  imported_at: Date | null
+  content_quality?: 'full' | 'preview' | null
   reading_time: number | null
   created_at: Date
   updated_at: Date
@@ -22,6 +26,7 @@ export interface ArticlePreview {
   author: string | null
   category: string | null
   image_url: string | null
+  source_name?: string | null
   reading_time: number | null
   created_at: Date
 }
@@ -34,6 +39,7 @@ export interface User {
   id: number
   email: string
   name: string | null
+  role: 'user' | 'admin'
   created_at: Date
 }
 
@@ -52,5 +58,10 @@ export interface Bookmark {
 
 export interface Category {
   category: string
+  count: number
+}
+
+export interface Source {
+  source_name: string
   count: number
 }

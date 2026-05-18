@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sparkles, BookOpen, Bookmark, User, Menu, X, Upload } from 'lucide-react'
+import { Sparkles, BookOpen, Bookmark, Menu, X, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useState, useEffect } from 'react'
@@ -11,14 +11,16 @@ const navigation = [
   { name: 'Home', href: '/', icon: Sparkles },
   { name: 'Articles', href: '/articles', icon: BookOpen },
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
-  { name: 'Upload', href: '/upload', icon: Upload },
 ]
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [user, setUser] = useState<{ name: string | null; email: string } | null>(null)
+  const [user, setUser] = useState<{ name: string | null; email: string; role: 'user' | 'admin' } | null>(null)
   const [loading, setLoading] = useState(true)
+  const navItems = user?.role === 'admin'
+    ? [...navigation, { name: 'Admin', href: '/admin', icon: Upload }]
+    : navigation
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,7 +60,7 @@ export function SiteHeader() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-1">
-          {navigation.map((item) => {
+          {navItems.map((item) => {
             const isActive = pathname === item.href || 
               (item.href !== '/' && pathname.startsWith(item.href))
             return (
@@ -124,7 +126,7 @@ export function SiteHeader() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-background">
           <div className="container mx-auto px-4 py-4 space-y-2">
-            {navigation.map((item) => {
+            {navItems.map((item) => {
               const isActive = pathname === item.href || 
                 (item.href !== '/' && pathname.startsWith(item.href))
               return (

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
   email       VARCHAR(255) UNIQUE NOT NULL,
   password    VARCHAR(255) NOT NULL,  -- bcrypt hash
   name        VARCHAR(100),
+  role        ENUM('user','admin') NOT NULL DEFAULT 'user',
   created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -35,11 +36,16 @@ CREATE TABLE IF NOT EXISTS articles (
   category    VARCHAR(50),
   tags        JSON,
   image_url   VARCHAR(500),
+  source_url  VARCHAR(1000),
+  source_name VARCHAR(255),
+  imported_at DATETIME,
+  content_quality ENUM('full','preview') NOT NULL DEFAULT 'full',
   reading_time INT,
   created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
   FULLTEXT KEY ft_search (title, body),
+  INDEX idx_source_url (source_url(255)),
   INDEX idx_category (category),
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -80,6 +86,20 @@ CREATE TABLE IF NOT EXISTS bookmarks (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   UNIQUE KEY unique_bookmark_user (user_id, article_id),
   UNIQUE KEY unique_bookmark_anon (anonymous_id, article_id),
+  INDEX idx_user_id (user_id),
+  INDEX idx_anonymous_id (anonymous_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Search analytics for admin insights
+CREATE TABLE IF NOT EXISTS search_logs (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT,
+  anonymous_id VARCHAR(36),
+  query_text  VARCHAR(255) NOT NULL,
+  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_query_text (query_text),
+  INDEX idx_created_at (created_at),
   INDEX idx_user_id (user_id),
   INDEX idx_anonymous_id (anonymous_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

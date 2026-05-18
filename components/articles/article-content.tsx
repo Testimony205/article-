@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Clock, User, Calendar, ArrowLeft } from 'lucide-react'
+import { Clock, User, Calendar, ArrowLeft, ExternalLink, Newspaper } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,9 @@ export function ArticleContent({ article }: ArticleContentProps) {
   const tags = article.tags 
     ? (typeof article.tags === 'string' ? JSON.parse(article.tags) : article.tags)
     : []
+  const publicTags = tags.filter((tag: string) => !['imported', article.source_name].includes(tag))
+  const plainBody = stripHtml(article.body)
+  const isShortImportedPreview = Boolean(article.source_url && (article.content_quality === 'preview' || plainBody.split(/\s+/).length < 180))
 
   return (
     <article className="max-w-3xl mx-auto">
@@ -90,17 +93,55 @@ export function ArticleContent({ article }: ArticleContentProps) {
         </div>
       )}
 
-      {/* Article Body */}
-      <div 
-        className="prose-article text-lg"
-        dangerouslySetInnerHTML={{ __html: formatArticleBody(article.body) }}
-      />
+      {isShortImportedPreview ? (
+        <div className="space-y-6">
+          <div className="rounded-lg border bg-muted/30 p-5">
+            <div className="mb-3 flex items-center gap-2 text-sm font-medium">
+              <Newspaper className="h-4 w-4" />
+              Source Preview
+            </div>
+            <p className="text-lg leading-relaxed text-muted-foreground">
+              {article.excerpt || plainBody}
+            </p>
+          </div>
+
+          {article.source_url && (
+            <Button asChild size="lg">
+              <a href={article.source_url} target="_blank" rel="noreferrer" className="gap-2">
+                Read full story
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+        </div>
+      ) : (
+        <>
+          <div 
+            className="prose-article text-lg"
+            dangerouslySetInnerHTML={{ __html: formatArticleBody(article.body) }}
+          />
+
+          {article.source_url && (
+            <div className="mt-8 rounded-lg border bg-muted/30 p-4">
+              <p className="mb-3 text-sm text-muted-foreground">
+                Continue with the original publication for the complete source article.
+              </p>
+              <Button asChild variant="outline">
+                <a href={article.source_url} target="_blank" rel="noreferrer" className="gap-2">
+                  Read original article
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Tags */}
-      {tags.length > 0 && (
+      {publicTags.length > 0 && (
         <div className="mt-10 pt-6 border-t">
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag: string) => (
+            {publicTags.map((tag: string) => (
               <Badge key={tag} variant="outline">
                 {tag}
               </Badge>
@@ -123,4 +164,13 @@ function formatArticleBody(body: string): string {
       .join('')
   }
   return body
+}
+
+function stripHtml(body: string): string {
+  return body
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }

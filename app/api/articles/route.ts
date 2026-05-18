@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
-import { searchArticles, getCategories } from '@/lib/recommendation-engine'
+import { getCategories } from '@/lib/recommendation-engine'
 import { vectorizeArticle } from '@/lib/vectorizer'
-import { getCurrentUser } from '@/lib/auth'
-import type { ArticlePreview } from '@/lib/types'
+import { requireAdmin } from '@/lib/auth'
+import { getUserIdentity, getUserInsertParams } from '@/lib/user-id'
+import { autoImportArticlesForSearch } from '@/lib/rss-importer'
+import type { ArticlePreview, Source } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await requireAdmin()
     if (!user) {
       return NextResponse.json(
-        { error: 'You must be logged in to upload articles' },
-        { status: 401 }
+        { error: 'Only admins can upload articles' },
+        { status: 403 }
       )
     }
 
@@ -71,48 +73,137 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')
     const category = searchParams.get('category')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const source = searchParams.get('source')
+    const sort = searchParams.get('sort') || 'newest'
+    const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '12'), 1), 48)
+    const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
-    let articles: ArticlePreview[]
+    const where: string[] = []
+    const params: unknown[] = []
+    let scoreSelect = ''
+    let orderBy = 'a.created_at DESC'
 
     if (search) {
-      // Use FULLTEXT search
-      articles = await searchArticles(search, limit)
-    } else if (category) {
-      // Filter by category
-      articles = await query<ArticlePreview[]>(`
-        SELECT id, title, slug, excerpt, author, category, image_url, reading_time, created_at
-        FROM articles
-        WHERE category = ?
-        ORDER BY created_at DESC
-        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
-      `, [category])
-    } else {
-      // Get all articles
-      articles = await query<ArticlePreview[]>(`
-        SELECT id, title, slug, excerpt, author, category, image_url, reading_time, created_at
-        FROM articles
-        ORDER BY created_at DESC
-        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
-      `)
+      const identity = await getUserIdentity()
+      const { userId, anonymousId } = getUserInsertParams(identity)
+
+      await query(`
+        INSERT INTO search_logs (user_id, anonymous_id, query_text, created_at)
+        VALUES (?, ?, ?, NOW())
+      `, [userId, anonymousId, search.trim().slice(0, 255)])
+
+      where.push('(MATCH(a.title, a.body) AGAINST(? IN NATURAL LANGUAGE MODE) OR a.title LIKE ? OR a.excerpt LIKE ?)')
+      params.push(search, `%${search}%`, `%${search}%`)
+      scoreSelect = ', MATCH(a.title, a.body) AGAINST(? IN NATURAL LANGUAGE MODE) AS search_score'
+      orderBy = 'search_score DESC, a.created_at DESC'
     }
 
-    // Get total count for pagination
+    if (category) {
+      where.push('a.category = ?')
+      params.push(category)
+    }
+
+    if (source) {
+      where.push('a.source_name = ?')
+      params.push(source)
+    }
+
+    if (!search) {
+      if (sort === 'oldest') orderBy = 'a.created_at ASC'
+      if (sort === 'title') orderBy = 'a.title ASC'
+    }
+
+    const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''
+    const articleParams = search ? [search, ...params] : params
+
+    let articles = await query<ArticlePreview[]>(`
+      SELECT
+        a.id,
+        a.title,
+        a.slug,
+        a.excerpt,
+        a.author,
+        a.category,
+        a.image_url,
+        a.source_name,
+        a.content_quality,
+        a.reading_time,
+        a.created_at
+        ${scoreSelect}
+      FROM articles a
+      ${whereClause}
+      ORDER BY ${orderBy}
+      LIMIT ${limit} OFFSET ${offset}
+    `, articleParams)
+
     const countResult = await query<[{ total: number }]>(`
-      SELECT COUNT(*) as total FROM articles
-      ${category ? 'WHERE category = ?' : ''}
-    `, category ? [category] : [])
+      SELECT COUNT(*) as total
+      FROM articles a
+      ${whereClause}
+    `, params)
 
-    const total = countResult[0]?.total || 0
+    let total = countResult[0]?.total || 0
+    let onlineImport: { attempted: boolean; imported: number; searchedSources: number } | null = null
 
-    // Get categories for filter
-    const categories = await getCategories()
+    if (search && total === 0 && offset === 0) {
+      const importResult = await autoImportArticlesForSearch(search, limit, {
+        includeNewsFallback: false,
+        requireReadableContent: true,
+      })
+      onlineImport = {
+        attempted: true,
+        imported: importResult.imported,
+        searchedSources: importResult.searchedSources,
+      }
+
+      if (importResult.imported > 0) {
+        articles = await query<ArticlePreview[]>(`
+          SELECT
+            a.id,
+            a.title,
+            a.slug,
+            a.excerpt,
+            a.author,
+            a.category,
+            a.image_url,
+            a.source_name,
+            a.content_quality,
+            a.reading_time,
+            a.created_at
+            ${scoreSelect}
+          FROM articles a
+          ${whereClause}
+          ORDER BY ${orderBy}
+          LIMIT ${limit} OFFSET ${offset}
+        `, articleParams)
+
+        const refreshedCount = await query<[{ total: number }]>(`
+          SELECT COUNT(*) as total
+          FROM articles a
+          ${whereClause}
+        `, params)
+
+        total = refreshedCount[0]?.total || 0
+      }
+    }
+
+    const [categories, sources] = await Promise.all([
+      getCategories(),
+      query<Source[]>(`
+        SELECT source_name, COUNT(*) as count
+        FROM articles
+        WHERE source_name IS NOT NULL AND source_name <> ''
+        GROUP BY source_name
+        ORDER BY count DESC, source_name ASC
+      `),
+    ])
 
     return NextResponse.json({
       articles,
       total,
       categories,
+      sources,
+      onlineImport,
       pagination: {
         limit,
         offset,

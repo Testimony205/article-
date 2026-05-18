@@ -12,8 +12,6 @@ export async function GET() {
       return NextResponse.json({ bookmarks: [] })
     }
 
-    const { userIdCondition, params } = getUserQueryParams(identity, 'b')
-
     const bookmarks = await query(`
       SELECT 
         b.id,

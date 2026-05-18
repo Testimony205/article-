@@ -10,6 +10,7 @@ interface User {
   id: number
   email: string
   name: string | null
+  role: 'user' | 'admin'
   created_at: Date
 }
 
@@ -60,6 +61,7 @@ export async function createUser(
     id: insertId,
     email,
     name: name || null,
+    role: 'user',
     created_at: new Date(),
   }
 }
@@ -69,7 +71,7 @@ export async function createUser(
  */
 export async function findUserByEmail(email: string): Promise<UserWithPassword | null> {
   const users = await query<UserWithPassword[]>(`
-    SELECT id, email, password, name, created_at
+    SELECT id, email, password, name, role, created_at
     FROM users
     WHERE email = ?
   `, [email])
@@ -82,7 +84,7 @@ export async function findUserByEmail(email: string): Promise<UserWithPassword |
  */
 export async function findUserById(id: number): Promise<User | null> {
   const users = await query<User[]>(`
-    SELECT id, email, name, created_at
+    SELECT id, email, name, role, created_at
     FROM users
     WHERE id = ?
   `, [id])
@@ -135,13 +137,22 @@ export async function getCurrentUser(): Promise<User | null> {
   if (!sessionToken) return null
 
   const results = await query<Array<User & { expires_at: Date }>>(`
-    SELECT u.id, u.email, u.name, u.created_at, s.expires_at
+    SELECT u.id, u.email, u.name, u.role, u.created_at, s.expires_at
     FROM users u
     JOIN sessions s ON u.id = s.user_id
     WHERE s.token = ? AND s.expires_at > NOW()
   `, [sessionToken])
 
   return results.length > 0 ? results[0] : null
+}
+
+export function isAdmin(user: User | null): boolean {
+  return user?.role === 'admin'
+}
+
+export async function requireAdmin(): Promise<User | null> {
+  const user = await getCurrentUser()
+  return isAdmin(user) ? user : null
 }
 
 /**

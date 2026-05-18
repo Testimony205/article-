@@ -1,4 +1,7 @@
 import mysql from 'mysql2/promise'
+import { loadEnvFile } from './load-env'
+
+loadEnvFile()
 
 const articles = [
   {

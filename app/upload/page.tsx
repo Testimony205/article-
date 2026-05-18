@@ -36,11 +36,14 @@ export default function UploadPage() {
         const data = await res.json()
         if (!data.user) {
           router.push('/auth/login?redirect=/upload')
+          return
+        } else if (data.user.role !== 'admin') {
+          router.push('/articles')
+          return
         }
+        setCheckingAuth(false)
       } catch {
         router.push('/auth/login')
-      } finally {
-        setCheckingAuth(false)
       }
     }
     checkAuth()
@@ -117,7 +120,7 @@ export default function UploadPage() {
             <CardTitle className="text-3xl">Submit New Article</CardTitle>
           </div>
           <CardDescription>
-            Share an inspirational article with the community. Our recommendation engine will handle the rest.
+            Add a curated article to the library. The recommendation engine will vectorize it automatically.
           </CardDescription>
         </CardHeader>
 
